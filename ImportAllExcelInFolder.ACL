@@ -1,0 +1,103 @@
+@ACL1000
+^FOLDER   aTables                             1375633329
+[PARENT_FOLDER_ID] 0
+^FOLDER   bScript                             1375633359
+[PARENT_FOLDER_ID] 0
+^FOLDER   zLogs                               1375633369
+[PARENT_FOLDER_ID] 0
+^LOGFILE  ImportAllExcelInFolder              "" "ImportAllExcelInFolder.LOG"
+[PARENT_FOLDER_ID] 1375633369
+^BATCH    ImportAllExcel                     
+[PARENT_FOLDER_ID] 1375633359
+COM
+*****************************************************************
+*** Script Name:  ImportAllExcel
+*** Description:  import all worksheets, excluding empty ones 
+                  from all MS Excel workbooks stored in a folder
+                  (C:\MY Folder\*.xlsx)
+*** Parameters:   None
+*** Output:       ACL Tables for individual worksheets
+*** Written By:   Muhammad Yousuf, Karachi - Pakistan {Jult 2013}
+*** Modified By:  
+*** Version:      1.0.0
+*****************************************************************
+
+COM
+*****************************************************************
+*** Preamble
+*****************************************************************
+
+ SET SAFETY OFF
+ SET ECHO NONE
+ SET FOLDER /aTables
+ CLOSE PRIMARY
+ CLOSE SECONDARY
+
+COM
+*****************************************************************
+*** Create table layout for getting list of all the workbooks
+*** and worksheets therein excluding empty sheets
+*****************************************************************
+
+DIR *.AC TO temp_dir
+OPEN temp_dir
+EXTRACT FIELDS BLANKS(1000) AS "Fullrec" TO temp_list FIRST 0
+
+COM
+*****************************************************************
+*** Setting output folder for storing .FIL files
+*****************************************************************
+
+v_output_folder = substr(FILE_NAME,1,at(occur(FILE_NAME,"\"),"\",FILE_NAME))
+
+
+COM
+*****************************************************************
+*** Calling vbscript to create a text file having workbooks
+*** and non-empty worksheets name 
+*****************************************************************
+
+EXECUTE 'CMD /C "%v_output_folder%Import_Excel.vbs"' 
+OPEN "C:\MY Folder\files_list.txt" FORMAT temp_list CRLF
+
+COM
+*****************************************************************
+*** Using Group structure to write a .BAT file for importing
+*** non-empty worksheets from the MS Excel files
+*****************************************************************
+
+v_ctr = 1
+
+Group 
+LOOP WHILE v_ctr <= OCCURS(Fullrec,";") 
+EXPORT FIELDS "IMPORT EXCEL TO " + ALLTRIM(SPLIT(Fullrec,".",1))+ZONED(v_ctr,2) + " " +'"%v_output_folder%'+ALLTRIM(SPLIT(Fullrec,".",1))+ZONED(v_ctr,2)+ '.FIL" FROM "C:\My Folder\'+ALLTRIM(SPLIT(Fullrec,";",1))+ '" TABLE "' + ALLTRIM(SPLIT(Fullrec,";",v_ctr+1))+'$" CHARMAX 50 KEEPTITLE' AS "AllRec" ASCII TO import_files.BAT APPEND 
+v_ctr = v_ctr + 1
+END
+v_ctr = 1 
+END 
+
+COM
+*****************************************************************
+*** Running import script 
+*****************************************************************
+
+DO SCRIPT import_files.BAT 
+
+COM
+*****************************************************************
+*** Cleanup
+*****************************************************************
+
+ DELETE SCRIPT import_files OK
+ DELETE FORMAT temp_list OK
+ DELETE "temp_list.FIL" OK
+ DELETE FORMAT temp_dir OK
+ DELETE "temp_dir.FIL" OK
+ DELETE FORMAT files_list OK
+ DELETE "C:\MY Folder\files_list.txt" OK
+ DELETE import_files.bat OK
+ CLOSE PRIMARY
+ CLOSE SECONDARY
+ SET ECHO ON
+ SET SAFETY ON
+^OPEN 
