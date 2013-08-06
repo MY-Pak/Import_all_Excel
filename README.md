@@ -20,7 +20,7 @@ a)	The VBA Project requires setting up of references to the following:
 -	Microsoft Scripting Runtime
 b)	A window folder namely ‘MY Folder’ created on the C drive
 c)	You have to place Import_Excel.vbs, Contest_One.xlsm and all MS Excel files needs to be imported in this folder (C:\MY Folder);
-d)	ACL project included in this project is to be kept in a single separate window folder
+d)	ACL project included in this project is to be kept in a separate window folder
 e)	Default ACL Options have been used, Tools -> Options -> Factory… 
 
 Limitations:
