@@ -1,4 +1,67 @@
 @ACL1000
+^LAYOUT   payslipfinal01                     94 D.T,
+Description    ASCII       1  29    
+From           NUMERIC    30   5 0  
+From1          NUMERIC    35   5 0  
+From2          NUMERIC    40   5 0  
+From3          NUMERIC    45   5 0  
+From4          NUMERIC    50   5 0  
+From5          NUMERIC    55   5 0  
+From6          NUMERIC    60   5 0  
+From7          NUMERIC    65   5 0  
+From8          NUMERIC    70   5 0  
+From9          NUMERIC    75   5 0  
+From10         NUMERIC    80   5 0  
+From11         NUMERIC    85   5 0  
+From12         NUMERIC    90   5 0  
+^LAYOUT   payslipfinal02                     99 D.T,
+Description    ASCII       1  29    
+From           NUMERIC    30   5 0  
+From1          NUMERIC    35   5 0  
+From2          NUMERIC    40   5 0  
+From3          NUMERIC    45   5 0  
+From4          NUMERIC    50   5 0  
+From5          NUMERIC    55   5 0  
+From6          NUMERIC    60   5 0  
+From7          NUMERIC    65   5 0  
+From8          NUMERIC    70   5 0  
+From9          NUMERIC    75   5 0  
+From10         NUMERIC    80   5 0  
+From11         NUMERIC    85   5 0  
+From12         NUMERIC    90   5 0  
+From13         NUMERIC    95   5 0  
+^LAYOUT   payslipfinal03                     122 D.T,
+Description    ASCII       1  17    
+From           NUMERIC    18   8 2  
+From1          NUMERIC    26   5 0  
+From2          NUMERIC    31   5 0  
+From3          NUMERIC    36   8 2  
+From4          NUMERIC    44   5 0  
+From5          NUMERIC    49   8 2  
+From6          NUMERIC    57   5 0  
+From7          NUMERIC    62   5 0  
+From8          NUMERIC    67   5 0  
+From9          NUMERIC    72   7 1  
+From10         NUMERIC    79   5 0  
+From11         NUMERIC    84   5 0  
+From12         NUMERIC    89   7 1  
+From13         NUMERIC    96   7 1  
+F16            ASCII     103  10    
+F17            ASCII     113  10    
+^LAYOUT   PerformanceUpToMar201301           116 D.T,
+S__No_         NUMERIC     1   2 0  
+Name_of_course ASCII       3  48    
+Planned        DATETIME   51  10   PICTURE "YYYY-MM-DD"  
+Actual         DATETIME   70  10   PICTURE "YYYY-MM-DD"  
+Duration       ASCII      89  11    
+Level          ASCII     100   5    
+No__of_participants NUMERIC   105   2 0  
+F8             ASCII     107  10    
+^LAYOUT   PIFRA_Training_Cost01              56 D.T,
+Course_Title   ASCII       1  22    
+Dates          ASCII      23  24    
+Refreshment    NUMERIC    47   5 0  
+Remuneration   NUMERIC    52   5 0  
 ^FOLDER   aTables                             1375633329
 [PARENT_FOLDER_ID] 0
 ^FOLDER   bScript                             1375633359
@@ -57,7 +120,7 @@ COM
 *** and non-empty worksheets name 
 *****************************************************************
 
-EXECUTE 'CMD /C "%v_output_folder%Import_Excel.vbs"' 
+EXECUTE 'CMD /C "C:\MY Folder\Import_Excel.vbs"' 
 OPEN "C:\MY Folder\files_list.txt" FORMAT temp_list CRLF
 
 COM
@@ -100,4 +163,24 @@ COM
  CLOSE SECONDARY
  SET ECHO ON
  SET SAFETY ON
+^FORMAT   payslipfinal01                     payslipfinal01                   "" "payslipfinal01.FIL" 0 ASCII 
+[PARENT_FOLDER_ID] 1375633329
+[RETRIEVE] 0
+[REFRESH] EXCEL "E:\AN10Contest\payslipfinal01.FIL" FROM "C:\My Folder\payslipfinal.xlsx" TABLE "without inc$" KEEPTITLE
+^FORMAT   payslipfinal02                     payslipfinal02                   "" "payslipfinal02.FIL" 0 ASCII 
+[PARENT_FOLDER_ID] 1375633329
+[RETRIEVE] 0
+[REFRESH] EXCEL "E:\AN10Contest\payslipfinal02.FIL" FROM "C:\My Folder\payslipfinal.xlsx" TABLE "ZA with inc$" KEEPTITLE
+^FORMAT   payslipfinal03                     payslipfinal03                   "" "payslipfinal03.FIL" 0 ASCII 
+[PARENT_FOLDER_ID] 1375633329
+[RETRIEVE] 0
+[REFRESH] EXCEL "E:\AN10Contest\payslipfinal03.FIL" FROM "C:\My Folder\payslipfinal.xlsx" TABLE "with inc$" KEEPTITLE
+^FORMAT   PerformanceUpToMar201301           PerformanceUpToMar201301         "" "PerformanceUpToMar201301.FIL" 0 ASCII 
+[PARENT_FOLDER_ID] 1375633329
+[RETRIEVE] 0
+[REFRESH] EXCEL "E:\AN10Contest\PerformanceUpToMar201301.FIL" FROM "C:\My Folder\PerformanceUpToMar2013.xlsx" TABLE "ATP$" KEEPTITLE
+^FORMAT   PIFRA_Training_Cost01              PIFRA_Training_Cost01            "" "PIFRA_Training_Cost01.FIL" 0 ASCII 
+[PARENT_FOLDER_ID] 1375633329
+[RETRIEVE] 0
+[REFRESH] EXCEL "E:\AN10Contest\PIFRA_Training_Cost01.FIL" FROM "C:\My Folder\PIFRA_Training_Cost.xlsx" TABLE "Sheet1$" KEEPTITLE
 ^OPEN 
